@@ -5,10 +5,20 @@ import { UserProfile, WorkoutSession } from '@/domain/types';
 const PROFILE_KEY = '@first-pullup/profile';
 const SESSIONS_KEY = '@first-pullup/sessions';
 
+function parseStoredValue<T>(raw: string | null, fallback: T): T {
+  if (!raw) return fallback;
+
+  try {
+    return JSON.parse(raw) as T;
+  } catch {
+    return fallback;
+  }
+}
+
 export const storageRepository = {
   async getProfile(): Promise<UserProfile> {
     const raw = await AsyncStorage.getItem(PROFILE_KEY);
-    if (raw) return { ...DEFAULT_PROFILE, ...JSON.parse(raw) };
+    if (raw) return { ...DEFAULT_PROFILE, ...parseStoredValue(raw, DEFAULT_PROFILE) };
     await AsyncStorage.setItem(PROFILE_KEY, JSON.stringify(DEFAULT_PROFILE));
     return DEFAULT_PROFILE;
   },
@@ -17,7 +27,7 @@ export const storageRepository = {
   },
   async getSessions(): Promise<WorkoutSession[]> {
     const raw = await AsyncStorage.getItem(SESSIONS_KEY);
-    return raw ? JSON.parse(raw) : [];
+    return parseStoredValue(raw, []);
   },
   async addSession(session: WorkoutSession) {
     const sessions = await this.getSessions();

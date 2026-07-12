@@ -29,7 +29,7 @@ src/
 
 ```bash
 npm install
-npm run android
+npm run start
 ```
 
 Android Studio 에뮬레이터 또는 USB 디버깅이 활성화된 Android 기기가 필요합니다. 타입 검사는 `npm run typecheck`로 실행합니다.

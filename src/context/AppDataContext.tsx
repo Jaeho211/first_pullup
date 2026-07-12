@@ -15,9 +15,25 @@ export function AppDataProvider({ children }: PropsWithChildren) {
   const [profile, setProfile] = useState(DEFAULT_PROFILE);
   const [sessions, setSessions] = useState<WorkoutSession[]>([]);
   const [loading, setLoading] = useState(true);
-  useEffect(() => { Promise.all([storageRepository.getProfile(), storageRepository.getSessions()])
-    .then(([nextProfile, nextSessions]) => { setProfile(nextProfile); setSessions(nextSessions); })
-    .finally(() => setLoading(false)); }, []);
+  useEffect(() => {
+    let mounted = true;
+
+    Promise.all([storageRepository.getProfile(), storageRepository.getSessions()])
+      .then(([nextProfile, nextSessions]) => {
+        if (!mounted) return;
+        setProfile(nextProfile);
+        setSessions(nextSessions);
+      })
+      .catch((error) => {
+        // Keep the app usable with defaults when local data is unavailable or corrupt.
+        console.error('Failed to load local app data', error);
+      })
+      .finally(() => {
+        if (mounted) setLoading(false);
+      });
+
+    return () => { mounted = false; };
+  }, []);
   const saveProfile = useCallback(async (next: UserProfile) => { await storageRepository.saveProfile(next); setProfile(next); }, []);
   const addSession = useCallback(async (session: WorkoutSession) => { await storageRepository.addSession(session); setSessions((old) => [session, ...old]); }, []);
   const resetData = useCallback(async () => { await storageRepository.clearAll(); await storageRepository.saveProfile(DEFAULT_PROFILE); setProfile(DEFAULT_PROFILE); setSessions([]); }, []);
