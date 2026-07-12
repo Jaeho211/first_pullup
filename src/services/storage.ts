@@ -33,6 +33,10 @@ export const storageRepository = {
     const sessions = await this.getSessions();
     await AsyncStorage.setItem(SESSIONS_KEY, JSON.stringify([session, ...sessions]));
   },
+  async updateSession(session: WorkoutSession) {
+    const sessions = await this.getSessions();
+    await AsyncStorage.setItem(SESSIONS_KEY, JSON.stringify(sessions.map((item) => item.id === session.id ? session : item)));
+  },
   async clearAll() {
     await AsyncStorage.multiRemove([PROFILE_KEY, SESSIONS_KEY]);
   },

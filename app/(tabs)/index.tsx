@@ -88,11 +88,18 @@ export default function HomeScreen() {
       </View>
       <View style={styles.routineCard}>
         {level.exercises.map((exercise, index) => (
-          <View key={exercise.id} style={[styles.exerciseRow, index < level.exercises.length - 1 && styles.exerciseDivider]}>
+          <Pressable
+            key={exercise.id}
+            accessibilityRole="button"
+            accessibilityLabel={`${exercise.name} 운동 자세 보기`}
+            android_ripple={{ color: colors.border }}
+            onPress={() => router.push({ pathname: '/workout/[exerciseId]', params: { exerciseId: exercise.id } })}
+            style={({ pressed }) => [styles.exerciseRow, index < level.exercises.length - 1 && styles.exerciseDivider, pressed && styles.exerciseRowPressed]}
+          >
             <View style={styles.exerciseNumber}><Text style={styles.exerciseNumberText}>{index + 1}</Text></View>
             <View style={styles.exerciseInfo}><Text style={styles.exerciseName}>{exercise.name}</Text><Text style={styles.exerciseTarget}>{exercise.targetText}{exercise.totalSets > 1 ? ` · ${exercise.totalSets}세트` : ''}</Text></View>
             <Ionicons name="chevron-forward" size={18} color={colors.disabled} />
-          </View>
+          </Pressable>
         ))}
       </View>
 
@@ -117,6 +124,6 @@ const styles = StyleSheet.create({
   calendarHeader: { flexDirection: 'row', justifyContent: 'space-between', alignItems: 'center' }, sectionLabel: { fontSize: 12, fontWeight: '700', color: colors.muted }, month: { marginTop: 3, fontSize: 20, fontWeight: '900', color: colors.text }, monthControls: { flexDirection: 'row', gap: 4 }, monthButton: { width: 40, height: 40, borderRadius: 20, alignItems: 'center', justifyContent: 'center', backgroundColor: colors.background },
   weekdays: { flexDirection: 'row', marginTop: 18, marginBottom: 6 }, weekday: { width: '14.285%', textAlign: 'center', fontSize: 12, fontWeight: '700', color: colors.muted }, sunday: { color: '#C7554D' }, calendarGrid: { flexDirection: 'row', flexWrap: 'wrap' }, dayCell: { width: '14.285%', height: 42, alignItems: 'center', justifyContent: 'center' }, dayCircle: { width: 34, height: 34, borderRadius: 17, alignItems: 'center', justifyContent: 'center' }, dayDone: { backgroundColor: colors.primary }, dayToday: { borderWidth: 1.5, borderColor: colors.primary }, dayText: { fontSize: 13, fontWeight: '600', color: colors.text }, dayDoneText: { color: '#FFFFFF', transform: [{ translateY: -3 }] }, dayCheck: { position: 'absolute', bottom: 2 }, calendarFooter: { marginTop: 10, paddingTop: 14, borderTopWidth: StyleSheet.hairlineWidth, borderTopColor: colors.border, flexDirection: 'row', alignItems: 'center', justifyContent: 'space-between' }, legend: { flexDirection: 'row', alignItems: 'center', gap: 7 }, legendDot: { width: 9, height: 9, borderRadius: 5, backgroundColor: colors.primary }, legendText: { fontSize: 12, color: colors.muted }, monthCount: { fontSize: 13, fontWeight: '800', color: colors.primaryDark },
   routineHeader: { marginTop: 28, marginBottom: 12, flexDirection: 'row', justifyContent: 'space-between', alignItems: 'flex-end' }, routineTitle: { marginTop: 3, fontSize: 22, fontWeight: '900', color: colors.text }, todayBadge: { flexDirection: 'row', alignItems: 'center', gap: 5, paddingHorizontal: 10, paddingVertical: 7, borderRadius: 999, backgroundColor: colors.surface }, todayBadgeDone: { backgroundColor: colors.accent }, todayBadgeText: { fontSize: 12, fontWeight: '800', color: colors.text },
-  routineCard: { paddingHorizontal: 16, borderRadius: 20, backgroundColor: colors.surface, overflow: 'hidden' }, exerciseRow: { minHeight: 72, flexDirection: 'row', alignItems: 'center', gap: 12 }, exerciseDivider: { borderBottomWidth: StyleSheet.hairlineWidth, borderBottomColor: colors.border }, exerciseNumber: { width: 32, height: 32, borderRadius: 10, alignItems: 'center', justifyContent: 'center', backgroundColor: colors.accent }, exerciseNumberText: { fontSize: 14, fontWeight: '900', color: colors.primaryDark }, exerciseInfo: { flex: 1 }, exerciseName: { fontSize: 15, fontWeight: '800', color: colors.text }, exerciseTarget: { marginTop: 4, fontSize: 13, color: colors.muted },
+  routineCard: { paddingHorizontal: 16, borderRadius: 20, backgroundColor: colors.surface, overflow: 'hidden' }, exerciseRow: { minHeight: 72, flexDirection: 'row', alignItems: 'center', gap: 12 }, exerciseRowPressed: { opacity: .65 }, exerciseDivider: { borderBottomWidth: StyleSheet.hairlineWidth, borderBottomColor: colors.border }, exerciseNumber: { width: 32, height: 32, borderRadius: 10, alignItems: 'center', justifyContent: 'center', backgroundColor: colors.accent }, exerciseNumberText: { fontSize: 14, fontWeight: '900', color: colors.primaryDark }, exerciseInfo: { flex: 1 }, exerciseName: { fontSize: 15, fontWeight: '800', color: colors.text }, exerciseTarget: { marginTop: 4, fontSize: 13, color: colors.muted },
   startButton: { minHeight: 56, marginTop: 20, borderRadius: 18, flexDirection: 'row', alignItems: 'center', justifyContent: 'center', gap: 9, backgroundColor: colors.primary, elevation: 3 }, startButtonText: { fontSize: 16, fontWeight: '900', color: '#FFFFFF' },
 });

@@ -21,14 +21,19 @@ export type ExerciseResult = {
   exerciseId: string;
   completedSets: number;
   totalSets: number;
+  setCompletedAt: string[];
 };
+
+export type WorkoutEffort = 'easy' | 'moderate' | 'hard';
 
 export type WorkoutSession = {
   id: string;
+  startedAt: string;
   completedAt: string;
   level: number;
   exercises: ExerciseResult[];
   fullyCompleted: boolean;
+  effort?: WorkoutEffort;
 };
 
 export type LevelDefinition = {

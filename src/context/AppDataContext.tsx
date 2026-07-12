@@ -7,6 +7,7 @@ type AppData = {
   profile: UserProfile; sessions: WorkoutSession[]; loading: boolean;
   saveProfile: (profile: UserProfile) => Promise<void>;
   addSession: (session: WorkoutSession) => Promise<void>;
+  updateSession: (session: WorkoutSession) => Promise<void>;
   resetData: () => Promise<void>;
 };
 const Context = createContext<AppData | null>(null);
@@ -36,8 +37,9 @@ export function AppDataProvider({ children }: PropsWithChildren) {
   }, []);
   const saveProfile = useCallback(async (next: UserProfile) => { await storageRepository.saveProfile(next); setProfile(next); }, []);
   const addSession = useCallback(async (session: WorkoutSession) => { await storageRepository.addSession(session); setSessions((old) => [session, ...old]); }, []);
+  const updateSession = useCallback(async (session: WorkoutSession) => { await storageRepository.updateSession(session); setSessions((old) => old.map((item) => item.id === session.id ? session : item)); }, []);
   const resetData = useCallback(async () => { await storageRepository.clearAll(); await storageRepository.saveProfile(DEFAULT_PROFILE); setProfile(DEFAULT_PROFILE); setSessions([]); }, []);
-  const value = useMemo(() => ({ profile, sessions, loading, saveProfile, addSession, resetData }), [profile, sessions, loading, saveProfile, addSession, resetData]);
+  const value = useMemo(() => ({ profile, sessions, loading, saveProfile, addSession, updateSession, resetData }), [profile, sessions, loading, saveProfile, addSession, updateSession, resetData]);
   return <Context.Provider value={value}>{children}</Context.Provider>;
 }
 export function useAppData() { const value = useContext(Context); if (!value) throw new Error('AppDataProvider is missing'); return value; }
