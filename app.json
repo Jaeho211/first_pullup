@@ -1,0 +1,1 @@
+{"expo":{"name":"첫 풀업","slug":"first-pullup","version":"1.0.0","orientation":"portrait","userInterfaceStyle":"light","scheme":"firstpullup","android":{"package":"com.jaeho.firstpullup"},"plugins":["expo-router"],"experiments":{"typedRoutes":true}}}
