@@ -52,17 +52,20 @@ const wallWSlide: ExerciseDefinition = {
 const assistedHang = (targetText: string, totalSets = 3): ExerciseDefinition => ({
   id: 'foot-assisted-hang',
   name: '발 보조 매달리기',
-  purpose: '발로 체중을 덜어 그립과 철봉 자세에 안전하게 적응합니다.',
+  purpose: '발로 부하를 조절하며 손바닥과 그립을 적응시키고 안정된 매달리기 자세를 익힙니다.',
   targetText,
   totalSets,
   tracking: duration({ key: 'assistance', label: '발 보조 정도' }),
   instructions: [
-    '철봉 아래의 안정된 의자에 두 발을 올리고 철봉을 잡습니다.',
-    '팔꿈치는 펴고 발로 필요한 만큼 체중을 지지합니다.',
-    '턱을 앞으로 내밀지 않은 채 목표 시간 동안 유지합니다.',
-    '내려올 때는 발에 체중을 다시 싣고 철봉을 놓습니다.',
+    '철봉 아래의 바닥이나 움직이지 않는 의자에 두 발을 안정적으로 둡니다.',
+    '철봉은 손가락과 손바닥의 경계보다 조금 손바닥 쪽에 놓고, 엄지는 철봉 아래로 감쌉니다.',
+    '팔꿈치를 편 채 발로 체중을 충분히 받습니다. 손에 싣는 비율을 맞추려 하지 말고 통증 없이 여유가 남는 정도로 조절합니다.',
+    '턱을 앞으로 내밀지 말고 목을 길게 유지하며 목표 시간 동안 반동 없이 매달립니다.',
+    '손가락이 풀리거나 자세가 무너지기 전에 발에 체중을 싣고 내려옵니다.',
+    '각 세트가 끝나면 60~90초 쉽니다.',
+    '10초 5세트가 편안해지면 12초, 다음에는 15초로 늘립니다. 그다음 발 보조를 조금 줄이고, 마지막에 일반 매달리기 5~10초를 시도합니다.',
   ],
-  caution: '의자가 움직이지 않는지 확인하고 그립이 풀릴 때까지 버티지 마세요.',
+  caution: '시간과 발 보조 감소를 동시에 늘리지 마세요. 손가락 관절이나 손목의 통증, 찌르는 통증, 저림 또는 힘 빠짐이 나타나면 즉시 중단하세요.',
 });
 
 const deadHang = (targetText: string, totalSets = 3): ExerciseDefinition => ({
@@ -83,7 +86,7 @@ const deadHang = (targetText: string, totalSets = 3): ExerciseDefinition => ({
 
 const scapularPullup = (assisted: boolean, targetText: string, totalSets: number): ExerciseDefinition => ({
   id: assisted ? 'chair-assisted-scapular-pullup' : 'scapular-pullup',
-  name: assisted ? '의자 보조 견갑 풀업' : '견갑 풀업',
+  name: assisted ? '발 보조 견갑 풀업' : '견갑 풀업',
   purpose: assisted
     ? '발로 체중을 덜어 팔꿈치를 펴고 어깨로 몸을 살짝 들어 올리는 감각을 익힙니다.'
     : '팔꿈치를 펴고 견갑을 아래로 움직여 풀업의 시작 힘을 기릅니다.',
@@ -92,10 +95,11 @@ const scapularPullup = (assisted: boolean, targetText: string, totalSets: number
   tracking: repetitions(...(assisted ? [{ key: 'assistance', label: '발 보조 정도' }] : [])),
   instructions: assisted
     ? [
-        '철봉 아래의 안정된 의자에 두 발을 올리고 팔꿈치를 편 채 매달립니다.',
-        '발로 체중 일부를 지지하고 어깨를 귀에서 멀어지게 아래로 내립니다.',
-        '팔꿈치를 굽히지 않은 채 몸이 2~5cm 올라가도록 합니다.',
-        '천천히 어깨를 시작 위치로 돌립니다.',
+        '철봉 아래의 바닥이나 움직이지 않는 의자에 발을 두고, 팔꿈치를 편 채 매달립니다.',
+        '발로 체중을 충분히 받으면서 어깨를 귀에서 멀어지게 아래로 내립니다.',
+        '팔꿈치를 굽히지 않고 견갑만 움직입니다. 몸이 1~3cm 올라가도 충분합니다.',
+        '목을 위로 빼거나 턱을 들지 말고, 천천히 어깨를 시작 위치로 돌립니다.',
+        '5회 내내 같은 자세를 유지할 수 있도록 발 보조를 조절하고 세트 사이 60~90초 쉽니다.',
       ]
     : [
         '팔꿈치를 편 채 철봉에 매달립니다.',
@@ -104,7 +108,7 @@ const scapularPullup = (assisted: boolean, targetText: string, totalSets: number
         '천천히 시작 위치로 돌아옵니다.',
       ],
   caution: assisted
-    ? '팔꿈치를 굽혀 풀업처럼 당기지 말고, 안정된 의자에서 발로 충분히 보조하세요.'
+    ? '팔꿈치를 굽혀 풀업처럼 당기거나 큰 동작을 만들려고 하지 마세요. 자세가 흐트러지면 발 보조를 늘리세요.'
     : '동작 범위가 작아도 괜찮습니다. 팔꿈치를 굽히거나 반동을 쓰지 마세요.',
 });
 
@@ -116,12 +120,14 @@ const assistedPullup = (targetText: string, totalSets = 3): ExerciseDefinition =
   totalSets,
   tracking: repetitions({ key: 'assistance', label: '발 보조 정도' }),
   instructions: [
-    '안정된 의자에 발을 올리고 팔을 편 상태에서 시작합니다.',
-    '가슴을 살짝 들고 팔꿈치를 아래로 끌어내립니다.',
-    '발로 필요한 만큼 밀어 턱이 철봉 높이에 오도록 합니다.',
-    '반동 없이 천천히 시작 위치로 돌아옵니다.',
+    '철봉 아래의 바닥이나 움직이지 않는 의자에 발을 두고 팔을 편 상태에서 시작합니다.',
+    '발로 체중을 충분히 받으며 먼저 어깨를 귀에서 멀어지게 아래로 내립니다.',
+    '가슴을 철봉 쪽으로 가져간다는 느낌으로 약 2초 동안 천천히 당깁니다.',
+    '턱이 철봉 위까지 올라가지 않아도 됩니다. 목을 내밀지 말고 통제 가능한 범위까지만 움직입니다.',
+    '약 3초 동안 천천히 내려와 팔을 편 시작 자세로 돌아옵니다.',
+    '반동 없이 모든 반복을 마칠 수 있도록 발 보조를 조절하고 세트 사이 60~90초 쉽니다.',
   ],
-  caution: '발로 충분히 보조하고 목을 내밀거나 반동을 사용하지 마세요.',
+  caution: '목표 반복을 채우려고 발 보조를 줄이거나 자세를 희생하지 마세요. 손 통증이나 그립 불안이 커지면 그 세트를 종료하세요.',
 });
 
 const negativePullup = (targetText: string, totalSets: number): ExerciseDefinition => ({
@@ -177,12 +183,12 @@ export const LEVELS: LevelDefinition[] = [
   {
     level: 1,
     name: '보조 당기기 적응',
-    summary: '발로 충분히 보조하며 첫날부터 실제 당기기 동작을 익힙니다.',
+    summary: '발 보조로 손바닥과 그립 부담을 조절하면서 견갑과 등의 당기기 힘을 함께 기릅니다.',
     exercises: [
       ...warmup,
-      assistedHang('15~20초', 3),
-      scapularPullup(true, '5회', 3),
-      assistedPullup('5회', 3),
+      assistedHang('10초 · 휴식 60~90초', 5),
+      scapularPullup(true, '5회 · 휴식 60~90초', 3),
+      assistedPullup('3회 · 2초 상승/3초 하강', 3),
     ],
   },
   {
