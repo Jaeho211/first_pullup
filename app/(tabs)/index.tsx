@@ -83,8 +83,8 @@ export default function HomeScreen() {
       </View>
 
       <View style={styles.routineHeader}>
-        <View><Text style={styles.sectionLabel}>오늘의 운동</Text><Text style={styles.routineTitle}>딱 10분 루틴</Text></View>
-        <View style={[styles.todayBadge, todayDone && styles.todayBadgeDone]}><Ionicons name={todayDone ? 'checkmark-circle' : 'time-outline'} size={16} color={todayDone ? colors.primary : colors.muted} /><Text style={styles.todayBadgeText}>{todayDone ? '완료' : '약 10분'}</Text></View>
+        <View><Text style={styles.sectionLabel}>오늘의 운동</Text><Text style={styles.routineTitle}>단계별 당기기 루틴</Text></View>
+        <View style={[styles.todayBadge, todayDone && styles.todayBadgeDone]}><Ionicons name={todayDone ? 'checkmark-circle' : 'barbell-outline'} size={16} color={todayDone ? colors.primary : colors.muted} /><Text style={styles.todayBadgeText}>{todayDone ? '완료' : `${level.exercises.length}개 운동`}</Text></View>
       </View>
       <View style={styles.routineCard}>
         {level.exercises.map((exercise, index) => (
@@ -105,7 +105,7 @@ export default function HomeScreen() {
 
       <Pressable accessibilityRole="button" android_ripple={{ color: '#FFFFFF2A' }} style={styles.startButton} onPress={() => router.push('/workout/session')}>
         <Ionicons name={todayDone ? 'refresh' : 'play'} size={20} color="#FFFFFF" />
-        <Text style={styles.startButtonText}>{todayDone ? '10분 루틴 다시 하기' : '10분 루틴 시작하기'}</Text>
+        <Text style={styles.startButtonText}>{todayDone ? '오늘 루틴 다시 하기' : '오늘 루틴 시작하기'}</Text>
       </Pressable>
     </Screen>
   );

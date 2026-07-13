@@ -5,8 +5,7 @@ import { PrimaryButton } from '@/components/PrimaryButton';
 import { Screen } from '@/components/Screen';
 import { colors } from '@/constants/theme';
 import { useAppData } from '@/context/AppDataContext';
-import { getLevel } from '@/domain/exercises';
-import { WorkoutEffort } from '@/domain/types';
+import { completedSetCount, WorkoutEffort } from '@/domain/types';
 
 const EFFORTS: [WorkoutEffort, string][] = [['easy', '쉬움'], ['moderate', '적당함'], ['hard', '어려움']];
 
@@ -14,11 +13,10 @@ export default function CompleteScreen() {
   const { id } = useLocalSearchParams<{ id: string }>();
   const { sessions, updateSession } = useAppData();
   const session = sessions.find((item) => item.id === id);
-  const level = getLevel(session?.level ?? 1);
   const setEffort = (effort: WorkoutEffort) => { if (session) void updateSession({ ...session, effort }); };
   return <Screen contentStyle={styles.screen}>
     <View><View style={styles.hero}><View style={styles.icon}><Ionicons name="checkmark" size={42} color="#FFF" /></View><Text style={styles.title}>오늘 운동 완료</Text><Text style={styles.subtitle}>정해진 루틴을 모두 마쳤습니다.</Text></View>
-      <View style={styles.results}>{session?.exercises.map((result) => { const exercise = level.exercises.find((item) => item.id === result.exerciseId); return <View key={result.exerciseId} style={styles.row}><Ionicons name="checkmark-circle" size={22} color={colors.primary} /><Text style={styles.name}>{exercise?.name ?? result.exerciseId}</Text><Text style={styles.count}>{result.completedSets}/{result.totalSets}세트</Text></View>; })}</View>
+      <View style={styles.results}>{session?.exercises.map((result) => <View key={result.exercise.id} style={styles.row}><Ionicons name="checkmark-circle" size={22} color={colors.primary} /><Text style={styles.name}>{result.exercise.name}</Text><Text style={styles.count}>{completedSetCount(result)}/{result.exercise.totalSets}세트</Text></View>)}</View>
       <Text style={styles.effortTitle}>오늘 강도는 어땠나요? (선택)</Text><View style={styles.efforts}>{EFFORTS.map(([value, label]) => <Pressable key={value} onPress={() => setEffort(value)} style={[styles.effort, session?.effort === value && styles.effortSelected]}><Text style={[styles.effortText, session?.effort === value && styles.effortTextSelected]}>{label}</Text></Pressable>)}</View>
     </View><View style={styles.buttons}><PrimaryButton title="홈으로" onPress={() => router.replace('/')} /><PrimaryButton title="기록 보기" variant="secondary" onPress={() => router.replace('/history')} /></View>
   </Screen>;

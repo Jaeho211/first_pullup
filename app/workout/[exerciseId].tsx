@@ -52,7 +52,7 @@ export default function ExerciseDetailScreen() {
         </Pressable>
       )}
 
-      <PrimaryButton title="10분 루틴 시작하기" onPress={() => router.push('/workout/session')} />
+      <PrimaryButton title="오늘 루틴 시작하기" onPress={() => router.push('/workout/session')} />
     </Screen>
   );
 }

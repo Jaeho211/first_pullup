@@ -6,14 +6,14 @@ import { UserProfile, WorkoutSession } from '@/domain/types';
 
 export async function exportWorkoutData(profile: UserProfile, sessions: WorkoutSession[]) {
   const report = {
-    schemaVersion: 1,
+    schemaVersion: 2,
     exportedAt: new Date().toISOString(),
     analysisGuide: '운동 빈도, 세트 간 휴식, 수행 속도, 중단 패턴, 레벨 적합성과 정체 가능성을 분석해 주세요.',
     profile,
     exerciseCatalog: LEVELS.map((level) => ({
       level: level.level,
       name: level.name,
-      exercises: level.exercises.map(({ id, name, purpose, targetText, totalSets }) => ({ id, name, purpose, targetText, totalSets })),
+      exercises: level.exercises.map(({ id, name, purpose, targetText, totalSets, tracking }) => ({ id, name, purpose, targetText, totalSets, tracking })),
     })),
     sessions,
   };
