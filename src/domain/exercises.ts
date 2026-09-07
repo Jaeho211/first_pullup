@@ -99,7 +99,7 @@ const scapularPullup = (assisted: boolean, targetText: string, totalSets: number
         '발로 체중을 충분히 받으면서 어깨를 귀에서 멀어지게 아래로 내립니다.',
         '팔꿈치를 굽히지 않고 견갑만 움직입니다. 몸이 1~3cm 올라가도 충분합니다.',
         '목을 위로 빼거나 턱을 들지 말고, 천천히 어깨를 시작 위치로 돌립니다.',
-        '5회 내내 같은 자세를 유지할 수 있도록 발 보조를 조절하고 세트 사이 60~90초 쉽니다.',
+        '모든 반복에서 같은 자세를 유지할 수 있도록 발 보조를 조절하고 세트 사이 60~90초 쉽니다.',
       ]
     : [
         '팔꿈치를 편 채 철봉에 매달립니다.',
@@ -125,9 +125,48 @@ const assistedPullup = (targetText: string, totalSets = 3): ExerciseDefinition =
     '가슴을 철봉 쪽으로 가져간다는 느낌으로 약 2초 동안 천천히 당깁니다.',
     '턱이 철봉 위까지 올라가지 않아도 됩니다. 목을 내밀지 말고 통제 가능한 범위까지만 움직입니다.',
     '약 3초 동안 천천히 내려와 팔을 편 시작 자세로 돌아옵니다.',
-    '반동 없이 모든 반복을 마칠 수 있도록 발 보조를 조절하고 세트 사이 60~90초 쉽니다.',
+    '반복을 겨우 채우는 강도가 아니라 세트가 끝난 뒤 2회 정도 더 할 여유가 남도록 발 보조를 충분히 사용합니다.',
+    '목표 반복을 모든 세트에서 안정적으로 수행하면 다음 훈련에서만 발 보조를 조금 줄입니다. 반복 수와 보조 감소를 동시에 올리지 않습니다.',
+    '세트 사이 90~120초 쉽니다.',
   ],
-  caution: '목표 반복을 채우려고 발 보조를 줄이거나 자세를 희생하지 마세요. 손 통증이나 그립 불안이 커지면 그 세트를 종료하세요.',
+  caution: '발 보조를 적게 쓰는 것이 목표가 아닙니다. 반동, 목 내밀기, 급격한 하강이 생기면 즉시 발 보조를 늘리세요.',
+});
+
+const assistedTopHold = (targetText: string, totalSets = 3): ExerciseDefinition => ({
+  id: 'foot-assisted-top-hold',
+  name: '발 보조 상단 버티기',
+  purpose: '발로 부하를 낮춘 상태에서 풀업 상단 자세와 등·팔의 긴장을 익힙니다.',
+  targetText,
+  totalSets,
+  tracking: duration({ key: 'assistance', label: '발 보조 정도' }),
+  instructions: [
+    '안정된 의자나 바닥을 이용해 턱이 철봉 높이에 오는 자세를 만듭니다.',
+    '발을 지지물에 둔 채 체중을 충분히 받아 어깨와 팔에 과도한 부담이 가지 않게 합니다.',
+    '가슴을 살짝 들고 어깨를 귀에서 멀리 둔 채 목표 시간 동안 유지합니다.',
+    '끝까지 버티지 말고 자세가 무너지기 전에 발에 체중을 더 싣고 내려옵니다.',
+    '목표 시간을 모든 세트에서 여유 있게 유지하면 다음 훈련에서 발 보조만 조금 줄입니다.',
+  ],
+  caution: '턱을 철봉 위로 내밀어 높이를 만들지 마세요. 어깨 앞쪽 통증이나 저림이 생기면 중단하세요.',
+});
+
+const assistedNegativePullup = (targetText: string, totalSets = 2): ExerciseDefinition => ({
+  id: 'foot-assisted-negative-pullup',
+  name: '발 보조 네거티브 풀업',
+  purpose: '발을 계속 지지한 채 천천히 내려오며 풀업 하강 구간의 힘과 제어를 익힙니다.',
+  targetText,
+  totalSets,
+  tracking: repetitions(
+    { key: 'descentSeconds', label: '하강 시간', unit: '초' },
+    { key: 'assistance', label: '발 보조 정도' },
+  ),
+  instructions: [
+    '의자나 바닥을 이용해 턱이 철봉 높이에 오는 상단 자세를 만듭니다.',
+    '발을 지지물에서 떼지 않고 체중을 충분히 받습니다.',
+    '팔과 등에 힘을 주면서 목표 시간 동안 일정한 속도로 내려옵니다.',
+    '마지막 구간에서 갑자기 떨어지지 않도록 필요하면 발에 더 많은 체중을 싣습니다.',
+    '매 반복마다 다리로 다시 상단 자세를 만들고, 올라가는 구간은 훈련하려고 애쓰지 않습니다.',
+  ],
+  caution: '하강 시간을 지키기 위해 발 보조를 줄이지 마세요. 통제할 수 없으면 보조를 더 사용합니다.',
 });
 
 const negativePullup = (targetText: string, totalSets: number): ExerciseDefinition => ({
@@ -182,52 +221,76 @@ const warmup = [chinTuck, wallWSlide];
 export const LEVELS: LevelDefinition[] = [
   {
     level: 1,
-    name: '보조 당기기 적응',
-    summary: '발 보조로 손바닥과 그립 부담을 조절하면서 견갑과 등의 당기기 힘을 함께 기릅니다.',
+    name: '매달리기와 견갑 적응',
+    summary: '그립에 적응하면서 발 보조로 견갑 움직임을 익힙니다.',
     exercises: [
       ...warmup,
-      assistedHang('10초 · 휴식 60~90초', 5),
-      scapularPullup(true, '5회 · 휴식 60~90초', 3),
-      assistedPullup('3회 · 2초 상승/3초 하강', 3),
+      assistedHang('10~15초 · 휴식 60~90초', 4),
+      scapularPullup(true, '5~8회 · 휴식 60~90초', 3),
     ],
   },
   {
     level: 2,
-    name: '견갑과 보조 풀업',
-    summary: '매달리기와 견갑 움직임을 안정시키고 보조 풀업 반복을 늘립니다.',
+    name: '강한 발 보조 당기기',
+    summary: '다리 도움을 충분히 사용해 실패하지 않는 풀업 반복량을 만듭니다.',
     exercises: [
       ...warmup,
-      deadHang('20~30초', 3),
-      scapularPullup(false, '5~8회', 3),
-      assistedPullup('6~8회', 3),
+      deadHang('20~30초', 2),
+      scapularPullup(true, '6~8회', 3),
+      assistedPullup('5~8회 · 2초 상승/3초 하강 · 2회 여유', 3),
     ],
   },
   {
     level: 3,
-    name: '네거티브 입문',
-    summary: '보조 풀업의 힘을 유지하며 짧은 네거티브를 시작합니다.',
+    name: '상단과 하강 제어',
+    summary: '발 보조를 유지한 채 상단 버티기와 느린 하강을 추가합니다.',
     exercises: [
       ...warmup,
       deadHang('20~30초', 2),
-      scapularPullup(false, '6~10회', 3),
-      assistedPullup('5~8회', 3),
-      negativePullup('3회 · 3초 하강', 2),
+      scapularPullup(true, '6~8회', 2),
+      assistedPullup('6~8회 · 2회 여유', 3),
+      assistedTopHold('5~10초 유지', 3),
+      assistedNegativePullup('3회 · 3~5초 하강', 2),
     ],
   },
   {
     level: 4,
-    name: '네거티브 강화',
-    summary: '보조를 줄이고 상단 유지와 느린 하강 능력을 기릅니다.',
+    name: '발 보조 줄이기',
+    summary: '반복 품질을 유지하면서 발 보조를 한 단계씩 줄입니다.',
     exercises: [
       ...warmup,
-      scapularPullup(false, '6~10회', 2),
-      assistedPullup('5~8회', 3),
-      negativePullup('3~5회 · 3~5초 하강', 3),
-      topHold,
+      scapularPullup(false, '5~8회', 3),
+      assistedPullup('5~8회 · 이전 단계보다 약한 발 보조', 3),
+      assistedTopHold('5~10초 · 이전보다 약한 발 보조', 2),
+      assistedNegativePullup('3회 · 5초 하강', 2),
     ],
   },
   {
     level: 5,
+    name: '네거티브 입문',
+    summary: '발을 떼는 네거티브를 시작하고 보조 풀업으로 충분한 반복량을 유지합니다.',
+    exercises: [
+      ...warmup,
+      scapularPullup(false, '6~8회', 2),
+      assistedPullup('5~8회 · 2회 여유', 3),
+      negativePullup('3회 · 3초 하강', 2),
+      topHold,
+    ],
+  },
+  {
+    level: 6,
+    name: '네거티브 강화',
+    summary: '느린 하강과 상단 유지 능력을 키우며 첫 풀업에 가까워집니다.',
+    exercises: [
+      ...warmup,
+      assistedPullup('4~6회 · 가능한 범위에서 보조 감소', 3),
+      negativePullup('3회 · 5초 하강', 3),
+      topHold,
+      scapularPullup(false, '6~10회', 2),
+    ],
+  },
+  {
+    level: 7,
     name: '첫 풀업 시도',
     summary: '세션 초반에 보조 없이 시도하고 보조 운동으로 힘을 보완합니다.',
     exercises: [
@@ -239,7 +302,7 @@ export const LEVELS: LevelDefinition[] = [
     ],
   },
   {
-    level: 6,
+    level: 8,
     name: '정자세 풀업 안정화',
     summary: '성공한 정자세 풀업을 안정적인 반복으로 발전시킵니다.',
     exercises: [
